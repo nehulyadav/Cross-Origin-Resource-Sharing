@@ -1,0 +1,63 @@
+<!Tried and tested on localhost:8888 (Listened by Apache Server on Port 8888 setup using MAMP Pro)>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title> Implements Cross-Site XMLHttpRequest </title>
+    <script type="text/javascript">
+
+// Create the XHR object.
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    xhr = null;
+  }
+  return xhr;
+}
+
+// Helper method to parse the title tag from the response.
+function getTitle(text) {
+  return text.match('<title>(.*)?</title>')[1];
+}
+
+// Implements the CORS request.
+function makeCorsRequest() {
+  var url = 'http://localhost:8888';
+
+  var xhr = createCORSRequest('GET', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var text = xhr.responseText;
+    var title = getTitle(text);
+    alert('Response from CORS request to ' + url + ': ' + title);
+  };
+
+  xhr.onerror = function() {
+    alert('Error in making the request.');
+  };
+
+  xhr.send();
+}
+
+</script>
+</head>
+<body>
+    <form id="controlsToInvoke" action="">
+        <p>
+        <input type="button" value="Click to Access Another Site using CORS" onclick="makeCorsRequest()" />
+        </p>    
+    </form>
+
+    </body>
+    </html>
