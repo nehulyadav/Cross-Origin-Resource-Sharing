@@ -42,7 +42,6 @@ function makeCorsRequest() {
     var title = getTitle(text);
     alert('Response from CORS request to ' + url + ': ' + title);
   };
-
   xhr.onerror = function() {
     alert('Error in making the request.');
   };
